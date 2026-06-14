@@ -66,7 +66,7 @@ public class Barcode extends HttpServlet {
             request.setAttribute("label", label);
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/result.jsp");
-		dispatcher.forward(request,response);
+			dispatcher.forward(request,response);
     }
             
     
