@@ -84,14 +84,6 @@ public class Barcode extends HttpServlet {
            
             this.doGet(request,response);
 }
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
   
     /**
      * Returns a short description of the servlet.
