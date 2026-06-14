@@ -5,6 +5,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -62,11 +63,21 @@ public class Barcode extends HttpServlet {
             response.setContentType("text/html");
             String code = request.getParameter("type");
             String label = request.getParameter("msg");
+            String fmt = request.getParameter("fmt");
+            String qz = request.getParameter("qz");
+            String height = request.getParameter("height");
+            String type =request.getParameter("type");
+            String mw =request.getParameter("mw");
             request.setAttribute("code", code);
             request.setAttribute("label", label);
+            request.setAttribute("fmt",fmt );
+            request.setAttribute("qz",qz);
+            request.setAttribute("height",height );
+            request.setAttribute("type",type);
+            request.setAttribute("mw",mw);
             
             RequestDispatcher dispatcher = request.getRequestDispatcher("/result.jsp");
-			dispatcher.forward(request,response);
+		dispatcher.forward(request,response);
     }
             
     
