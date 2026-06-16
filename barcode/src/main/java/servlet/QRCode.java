@@ -4,9 +4,11 @@
  */
 package servlet;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
 import java.io.IOException;
-import java.util.Set;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -19,12 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author cedric
  */
-@WebServlet(urlPatterns={"/servlet/Barcode"})
-public class Barcode extends HttpServlet {
+@WebServlet(urlPatterns={"/servlet/QRCode"})
+public class QRCode extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
-    public Barcode(){
+    public QRCode(){
     super();
     }
     
@@ -44,7 +45,22 @@ public class Barcode extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet QRCode</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet QRCode at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -58,38 +74,29 @@ public class Barcode extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("text/html");
-            String code = request.getParameter("type");
-            String codeType = request.getParameter("codeType");
-            String label = request.getParameter("msg");
-            String fmt = request.getParameter("fmt");
-            String qz = request.getParameter("qz");
-            String height = request.getParameter("height");
-            String type =request.getParameter("type");
-            String mw =request.getParameter("mw");
-            String wf=request.getParameter("wf");
-            String dpi =request.getParameter("dpi");
-            String hrp =request.getParameter("human-readable-pos");
-            
-            request.setAttribute("code", code);
-            request.setAttribute("label", label);
-            request.setAttribute("fmt",fmt );
-            request.setAttribute("qz",qz);
-            request.setAttribute("height",height );
-            request.setAttribute("type",type);
-            request.setAttribute("mw",mw);
-            request.setAttribute("wf", wf);
-            request.setAttribute("dpi",dpi);
-            request.setAttribute("human-readable-pos",hrp);
-            request.setAttribute("codeType",codeType);
-            
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/result.jsp");
-		dispatcher.forward(request,response);
+        processRequest(request, response);
+        String msg=request.getParameter("msg");
+        if(msg == null || msg.isEmpty()) msg = "EMPTY";
+        int size = Integer.parseInt(request.getParameter("size") != null ? request.getParameter("size"):"250");
+        request.setAttribute("size",size);
+        request.setAttribute("msg",msg);
+        response.setContentType("image/png");
+        
+        try{
+            BitMatrix matrix = new MultiFormatWriter().encode(
+            msg,
+            BarcodeFormat.QR_CODE,
+            size,
+            size
+            );
+        
+            MatrixToImageWriter.writeToStream(matrix, msg, response.getOutputStream());
+        
+        } catch (Exception e){
+            response.sendError(500, "erreur avec la génération du QR Code");
+        }
     }
-            
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -101,10 +108,9 @@ public class Barcode extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-           
-            this.doGet(request,response);
-}
-  
+        processRequest(request, response);
+    }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -113,6 +119,6 @@ public class Barcode extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-}
-    
+    }// </editor-fold>
+
 }
