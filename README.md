@@ -8,4 +8,4 @@ Appeler les méthodes qui affichent les métadonnées(adresse du serveur, naviga
 
 **Afficher un code-barres**
 
-Utiliser le servlet Barcode4j pour afficher un code-barres
+Utiliser le servlet Barcode4j pour afficher un code-barres et un QRCode
