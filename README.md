@@ -6,6 +6,6 @@ Dans un projet web dynamique créé avec Apache Netbeans 26, créer un servlet e
 
 Appeler les méthodes qui affichent les métadonnées(adresse du serveur, navigateur, cookies).
 
-**Afficher un code-barres**
+**Afficher un code-barres et un QRCode**
 
 Utiliser le servlet Barcode4j pour afficher un code-barres et un QRCode
